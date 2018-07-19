@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\OTCWebApi\UserWebApi.csproj" />
+    <ProjectReference Include="..\UserWebApi\UserWebApi.csproj" />
   </ItemGroup>
 
 </Project>

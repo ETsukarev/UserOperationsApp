@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2026
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OTCTest", "OTCTest\OTCTest.csproj", "{9BD48AE0-F2BD-4592-AC30-AFAB2C9FD031}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserMVCApp", "OTCTest\UserMVCApp.csproj", "{9BD48AE0-F2BD-4592-AC30-AFAB2C9FD031}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OTCWebApi", "OTCWebApi\OTCWebApi.csproj", "{A4EBF265-4B5C-49E9-8D1A-FBD94B21DC5E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserWebApi", "OTCWebApi\UserWebApi.csproj", "{A4EBF265-4B5C-49E9-8D1A-FBD94B21DC5E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

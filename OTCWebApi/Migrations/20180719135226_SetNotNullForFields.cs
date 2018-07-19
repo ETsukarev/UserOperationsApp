@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace OTCWebApi.Migrations
+namespace UserWebApi.Migrations
 {
     public partial class SetNotNullForFields : Migration
     {

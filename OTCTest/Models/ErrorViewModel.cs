@@ -1,4 +1,4 @@
-namespace OTCTest.Models
+namespace UserMVCApp.Models
 {
     public class ErrorViewModel
     {

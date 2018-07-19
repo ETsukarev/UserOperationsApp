@@ -1,4 +1,4 @@
-﻿namespace OTCTest
+﻿namespace UserMVCApp
 {
     public class UriWebAPI
     {

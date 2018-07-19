@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace OTCWebApi.Migrations
+namespace UserWebApi.Migrations
 {
     public partial class InitialCreate : Migration
     {

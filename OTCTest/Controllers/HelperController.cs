@@ -2,8 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
-
-namespace OTCTest.Controllers
+namespace UserMVCApp.Controllers
 {
     public class HelperController : Controller
     {

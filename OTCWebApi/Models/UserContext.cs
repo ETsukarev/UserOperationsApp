@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace OTCWebApi.Models
+namespace UserWebApi.Models
 {
     public sealed class UserContext : DbContext
     {
@@ -8,7 +8,6 @@ namespace OTCWebApi.Models
 
         public UserContext(DbContextOptions<UserContext> options) : base(options)
         {
-            //Database.EnsureCreated();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

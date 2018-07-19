@@ -3,7 +3,7 @@ using Castle.Windsor;
 using Castle.Windsor.MsDependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace OTCTest
+namespace UserMVCApp
 {
     public class ServiceResolver 
     {

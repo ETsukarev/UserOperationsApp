@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 
-namespace OTCTest
+namespace UserMVCApp
 {
     public class Program
     {

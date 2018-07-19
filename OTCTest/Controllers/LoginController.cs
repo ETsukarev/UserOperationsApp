@@ -5,10 +5,9 @@ using Castle.Core.Internal;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
-using OTCTest.Models;
+using UserMVCApp.Models;
 
-
-namespace OTCTest.Controllers
+namespace UserMVCApp.Controllers
 {
     public class LoginController : Controller
     {

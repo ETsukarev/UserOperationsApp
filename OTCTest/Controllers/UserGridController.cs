@@ -1,12 +1,12 @@
 ﻿using System.Net;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using OTCTest.Models;
-using OTCWebApi.Models;
+using UserMVCApp.Models;
+using UserWebApi.Models;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace OTCTest.Controllers
+namespace UserMVCApp.Controllers
 {
     public class UserGridController : Controller
     {

@@ -1,4 +1,4 @@
-﻿namespace OTCWebApi.Models
+﻿namespace UserWebApi.Models
 {
     /// <summary>
     /// 1. Логин

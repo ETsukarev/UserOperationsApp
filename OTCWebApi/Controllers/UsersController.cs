@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using OTCWebApi.Models;
+using UserWebApi.Models;
 
-namespace OTCWebApi.Controllers
+namespace UserWebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

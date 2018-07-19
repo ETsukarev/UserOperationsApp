@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using OTCWebApi.Models;
+using UserWebApi.Models;
 
-namespace OTCWebApi
+namespace UserWebApi
 {
     public class Startup
     {

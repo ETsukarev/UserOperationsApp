@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace OTCTest.Models
+namespace UserMVCApp.Models
 {
     public class UserEdit
     {

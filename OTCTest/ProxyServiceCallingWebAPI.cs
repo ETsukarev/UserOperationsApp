@@ -9,10 +9,9 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using OTCWebApi.Models;
+using UserWebApi.Models;
 
-
-namespace OTCTest
+namespace UserMVCApp
 {
     public interface IProxyServiceCallingWebApi : IHostedService
     {

@@ -4,6 +4,7 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <ApplicationIcon />
     <OutputType>Exe</OutputType>
+    <TieredCompilation>true</TieredCompilation>
     <StartupObject />
   </PropertyGroup>
 

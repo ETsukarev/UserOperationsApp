@@ -13,10 +13,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\DataTables\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\UserWebApi\UserWebApi.csproj" />
   </ItemGroup>
 

@@ -45,11 +45,17 @@
 <script>
 
 $(function() {
-        var table = $('#myTableUsers').DataTable({
+    var table = $('#myTableUsers').DataTable({
+            "serverSide": true,
             "ajax": {
                 "url": "/Helper/GetAllUsers",
                 "type": "GET",
-                "datatype": "json"
+                "datatype": "json",
+                "contentType": "application/json",
+                "data": function (d) {
+                    var dataTemp = d;
+                    return JSON.stringify(dataTemp);
+                }
             },
             "columnDefs":
                 [

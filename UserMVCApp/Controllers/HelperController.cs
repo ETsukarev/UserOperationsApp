@@ -8,7 +8,7 @@ namespace UserMVCApp.Controllers
     {
         // GET: /<controller>/
         [HttpGet]
-        public IActionResult GetAllUsers([FromServices] IProxyServiceCallingWebApi proxyServiceCallingWeb)
+        public JsonResult GetAllUsers([FromServices] IProxyServiceCallingWebApi proxyServiceCallingWeb)
         {
             var users = Task.Run(proxyServiceCallingWeb.GetAllUsers).Result;
             var jsonObj = Json(new { data = users });

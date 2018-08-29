@@ -10,12 +10,13 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using UserWebApi.Models;
+using UserWebApi.Proxy;
 
 namespace UserMVCApp
 {
     public interface IProxyServiceCallingWebApi : IHostedService
     {
-        Task<List<User>> GetAllUsers();
+        Task<ServerSidePage> GetAllUsers(serverSideParams serverSidePrms);
 
         Task<List<User>> GetAllUsersWithoutAdmins();
 
@@ -37,6 +38,32 @@ namespace UserMVCApp
         private readonly HttpClient _client;
 
         private const string ApiUsersRoot = "api/Users";
+
+        private const string ApiUsersGetAllUsers = "api/Users/AllUsers?";
+
+        private const string ServerSideParamDraw = "draw=";
+
+        private const string ServerSideParamStart = "&start=";
+
+        private const string ServerSideParamLength = "&length=";
+
+        private const string ServerSideParamSearchValue = "&searchValue=";
+
+        private const string ServerSideParamSearchRegex = "&searchRegex=";
+
+        private const string ServerSideParamOrderColumns = "&orderColumns=";
+
+        private const string ServerSideParamOrderDirs = "&orderDirs=";
+
+        private const string ServerSideParamColumnsDatas = "&columnsDatas=";
+
+        private const string ServerSideParamColumnsSearchable = "&columnsSearchable=";
+
+        private const string ServerSideParamColumnsOrderable = "&columnsOrderable=";
+
+        private const string ServerSideParamСolumnsSearchValue = "&columnsSearchValue=";
+
+        private const string ServerSideParamColumnsSearchRegex = "&columnsSearchRegex=";
 
         private const string ApiUsersWithoutAdmins = "api/Users/WithOutAdmins";
 
@@ -88,16 +115,51 @@ namespace UserMVCApp
 
         #endregion
 
-        public async Task<List<User>> GetAllUsers()
+        public async Task<ServerSidePage> GetAllUsers(serverSideParams serverSidePrms)
         {
-            HttpResponseMessage response = await _client.GetAsync(ApiUsersRoot);
-
-            if (response.IsSuccessStatusCode)
+            try
             {
-                var stringResult = await response.Content.ReadAsStringAsync();
-                return JsonConvert.DeserializeObject<List<User>>(stringResult);
+                var strBuilderParams = new StringBuilder()
+                    .Append(ApiUsersGetAllUsers)
+                    .Append(ServerSideParamDraw)
+                    .Append(serverSidePrms.draw)
+                    .Append(ServerSideParamStart)
+                    .Append(serverSidePrms.start)
+                    .Append(ServerSideParamLength)
+                    .Append(serverSidePrms.length)
+                    .Append(ServerSideParamColumnsDatas)
+                    .Append(serverSidePrms.columnsDatas)
+                    .Append(ServerSideParamColumnsOrderable)
+                    .Append(serverSidePrms.columnsOrderable)
+                    .Append(ServerSideParamColumnsSearchable)
+                    .Append(serverSidePrms.columnsSearchable)
+                    .Append(ServerSideParamColumnsSearchRegex)
+                    .Append(serverSidePrms.columnsSearchRegex)
+                    .Append(ServerSideParamSearchValue)
+                    .Append(serverSidePrms.searchValue)
+                    .Append(ServerSideParamOrderColumns)
+                    .Append(serverSidePrms.orderColumns)
+                    .Append(ServerSideParamOrderDirs)
+                    .Append(serverSidePrms.orderDirs)
+                    .Append(ServerSideParamСolumnsSearchValue)
+                    .Append(serverSidePrms.columnsSearchValue)
+                    .Append(ServerSideParamSearchRegex)
+                    .Append(serverSidePrms.searchRegex);
+
+                HttpResponseMessage response = _client.GetAsync(strBuilderParams.ToString()).Result;
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var stringResult = await response.Content.ReadAsStringAsync();
+                    return JsonConvert.DeserializeObject<ServerSidePage>(stringResult);
+                }
+
+                return new ServerSidePage() { error = $"Error status: {response.StatusCode.ToString()}" };
             }
-            return new List<User>();
+            catch (Exception e)
+            {
+                return new ServerSidePage(){error = e.Message};
+            }
         }
 
         public async Task<List<User>> GetAllUsersWithoutAdmins()
@@ -114,7 +176,7 @@ namespace UserMVCApp
 
         public async Task<User> CheckUserAndPasswd(string user, string password)
         {
-            StringBuilder builderQuery = new StringBuilder()
+            var builderQuery = new StringBuilder()
                 .Append(ApiUsersRoot)
                 .Append(ApiCheckUserLogin)
                 .Append(user)
@@ -150,33 +212,20 @@ namespace UserMVCApp
 
         public HttpStatusCode SaveUser(User user)
         {
-            StringBuilder builderQuery = new StringBuilder()
-                .Append(SaveUserBegin)
-                .Append(user.Id)
-                .Append(SaveUserLogin)
-                .Append(user.Login)
-                .Append(SaveUserPassword)
-                .Append(user.Password)
-                .Append(SaveUserFirstName)
-                .Append(user.FirstName)
-                .Append(SaveUserMiddleName)
-                .Append(user.MiddleName)
-                .Append(SaveUserLastName)
-                .Append(user.LastName)
-                .Append(SaveUserTelephone)
-                .Append(user.Telephone)
-                .Append(SaveUserIsAdmin)
-                .Append(user.IsAdmin);
-
-
-            HttpResponseMessage response = _client.PutAsync(builderQuery.ToString(), null).Result;
+            HttpResponseMessage response = _client.PutAsync(PackUserInParams(SaveUserBegin, user), null).Result;
             return response.StatusCode;
         }
 
         public HttpStatusCode NewUser(User user)
         {
-            StringBuilder builderQuery = new StringBuilder()
-                .Append(NewUserBegin)
+            HttpResponseMessage response = _client.PostAsync(PackUserInParams(NewUserBegin, user), null).Result;
+            return response.StatusCode;
+        }
+
+        private string PackUserInParams(string beginParams, User user)
+        {
+            var builderQuery = new StringBuilder()
+                .Append(beginParams)
                 .Append(user.Id)
                 .Append(SaveUserLogin)
                 .Append(user.Login)
@@ -193,8 +242,7 @@ namespace UserMVCApp
                 .Append(SaveUserIsAdmin)
                 .Append(user.IsAdmin);
 
-            HttpResponseMessage response = _client.PostAsync(builderQuery.ToString(), null).Result;
-            return response.StatusCode;
+            return builderQuery.ToString();
         }
 
         public void Dispose()

@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using UserWebApi.Proxy;
 
 namespace UserMVCApp.Controllers
 {
@@ -8,10 +9,11 @@ namespace UserMVCApp.Controllers
     {
         // GET: /<controller>/
         [HttpGet]
-        public JsonResult GetAllUsers([FromServices] IProxyServiceCallingWebApi proxyServiceCallingWeb)
+        public JsonResult GetAllUsers([FromServices] IProxyServiceCallingWebApi proxyServiceCallingWeb, [FromQuery] serverSideParams serverSide)
         {
-            var users = Task.Run(proxyServiceCallingWeb.GetAllUsers).Result;
-            var jsonObj = Json(new { data = users });
+            var task = Task.Run(() => proxyServiceCallingWeb.GetAllUsers(serverSide));
+            var users = task.Result;
+            var jsonObj = Json(new { users });  
             return jsonObj;
         }
 

@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using UserWebApi.Models;
+using UserWebApi.Proxy;
 
 namespace UserWebApi.Controllers
 {
@@ -9,6 +11,10 @@ namespace UserWebApi.Controllers
     [ApiController]
     public class UsersController : Controller
     {
+        private const string AscSort = "asc";
+
+        private const string DescSort = "desc";
+
         readonly UserContext _dbContext;
 
         public UsersController(UserContext context)
@@ -16,11 +22,91 @@ namespace UserWebApi.Controllers
             _dbContext = context;
         }
 
-        // GET: api/<controller>
-        [HttpGet]
-        public IEnumerable<User> Get()
+        // GET: api/<controller>/AllUsers?
+        [HttpGet("AllUsers")]
+        public ServerSidePage Get([FromQuery]serverSideParams serverSidePrms)
         {
-            return _dbContext.Users.ToList();
+            var users = from user in _dbContext.Users select user;
+            var recsTotal = users.Count();
+
+            if (!string.IsNullOrEmpty(serverSidePrms.searchValue))
+            {
+                users = users.Where(s => s.Login.Contains(serverSidePrms.searchValue)
+                                      || s.FirstName.Contains(serverSidePrms.searchValue)
+                                      || s.MiddleName.Contains(serverSidePrms.searchValue)
+                                      || s.LastName.Contains(serverSidePrms.searchValue)
+                                      || s.Telephone.Contains(serverSidePrms.searchValue));
+            }
+
+            var listSorting = serverSidePrms.RulesSorting();
+            foreach (var item in listSorting)
+            {
+                switch (item.numberCol)
+                {
+                    case 0:
+                        if (item.typeSorting.Equals(AscSort))
+                            users = users.OrderBy(usr => usr.Id);
+                        else if (item.typeSorting.Equals(DescSort))
+                            users = users.OrderByDescending(usr => usr.Id);
+                        break;
+                    case 1:
+                        if (item.typeSorting.Equals(AscSort))
+                            users = users.OrderBy(usr => usr.Login);
+                        else if (item.typeSorting.Equals(DescSort))
+                            users = users.OrderByDescending(usr => usr.Login);
+                        break;
+                    case 2:
+                        if (item.typeSorting.Equals(AscSort))
+                            users = users.OrderBy(usr => usr.Password);
+                        else if (item.typeSorting.Equals(DescSort))
+                            users = users.OrderByDescending(usr => usr.Password);
+                        break;
+                    case 3:
+                        if (item.typeSorting.Equals(AscSort))
+                            users = users.OrderBy(usr => usr.LastName);
+                        else if (item.typeSorting.Equals(DescSort))
+                            users = users.OrderByDescending(usr => usr.LastName);
+                        break;
+                    case 4:
+                        if (item.typeSorting.Equals(AscSort))
+                            users = users.OrderBy(usr => usr.FirstName);
+                        else if (item.typeSorting.Equals(DescSort))
+                            users = users.OrderByDescending(usr => usr.FirstName);
+                        break;
+                    case 5:
+                        if (item.typeSorting.Equals(AscSort))
+                            users = users.OrderBy(usr => usr.MiddleName);
+                        else if (item.typeSorting.Equals(DescSort))
+                            users = users.OrderByDescending(usr => usr.MiddleName);
+                        break;
+                    case 6:
+                        if (item.typeSorting.Equals(AscSort))
+                            users = users.OrderBy(usr => usr.Telephone);
+                        else if (item.typeSorting.Equals(DescSort))
+                            users = users.OrderByDescending(usr => usr.Telephone);
+                        break;
+                    case 7:
+                        if (item.typeSorting.Equals(AscSort))
+                            users = users.OrderBy(usr => usr.IsAdmin);
+                        else if (item.typeSorting.Equals(DescSort))
+                            users = users.OrderByDescending(usr => usr.IsAdmin);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            var recordsFiltered = users.Count();
+            var items = users.AsNoTracking().Skip(serverSidePrms.start).Take(serverSidePrms.length).ToArray();
+            var result = new ServerSidePage()
+            {
+                draw = serverSidePrms.draw,
+                recordsTotal = recsTotal,
+                recordsFiltered = recordsFiltered,
+                error = string.Empty,
+                data = items
+            };
+
+            return result;
         }
 
         // GET: api/<controller>/WithOutAdmins

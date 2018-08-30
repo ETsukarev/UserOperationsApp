@@ -4,7 +4,7 @@
 // Write your JavaScript code.
 function prepareServerSideParams(params) {
 
-    var serverSideParams = new Object();
+    var serverSideParams = Object();
 
     serverSideParams.draw = params.draw;
     serverSideParams.start = params.start;
@@ -60,4 +60,19 @@ function prepareServerSideParams(params) {
     serverSideParams.columnsSearchRegex = columnsSearchRegex;
 
     return serverSideParams;
+}
+
+function filterResponseData(data) {
+
+    var res = Object();
+
+    var json = jQuery.parseJSON(data);
+
+    res.recordsTotal = json.users.recordsTotal;
+    res.recordsFiltered = json.users.recordsFiltered;
+    res.data = json.users.data;
+    if (json.users.error !== "")
+        res.error = json.users.error;
+
+    return JSON.stringify(res);
 }

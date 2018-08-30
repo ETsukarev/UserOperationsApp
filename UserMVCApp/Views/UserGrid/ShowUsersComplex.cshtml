@@ -48,23 +48,14 @@
     $(function() {
         var table = $('#myTableUsers').DataTable({
             "serverSide": true,
+            "order": [[3, 'asc']],
             "ajax": {
                 "url": "/Helper/GetAllUsers",
                 "type": "GET",
                 "datatype": "json",
                 "contentType": "application/json",
                 "data": prepareServerSideParams,
-                "dataFilter": function(data) {
-
-                    var json = jQuery.parseJSON(data);
-                    var res = new Object();
-                    res.recordsTotal = json.users.recordsTotal;
-                    res.recordsFiltered = json.users.recordsFiltered;
-                    res.data = json.users.data;
-                    res.error = json.users.error;
- 
-                    return JSON.stringify( res );
-                }
+                "dataFilter": filterResponseData
             },
             "columnDefs":
             [

@@ -18,7 +18,7 @@ namespace UserMVCApp
     {
         Task<ServerSidePage> GetAllUsers(serverSideParams serverSidePrms);
 
-        Task<List<User>> GetAllUsersWithoutAdmins();
+        Task<ServerSidePage> GetAllUsersWithoutAdmins(serverSideParams serverSid);
 
         Task<User> CheckUserAndPasswd(string user, string password);
 
@@ -65,7 +65,7 @@ namespace UserMVCApp
 
         private const string ServerSideParamColumnsSearchRegex = "&columnsSearchRegex=";
 
-        private const string ApiUsersWithoutAdmins = "api/Users/WithOutAdmins";
+        private const string ApiUsersWithoutAdmins = "api/Users/WithOutAdmins?";
 
         private const string ApiCheckUserLogin = "/CheckUser?login=";
 
@@ -119,34 +119,7 @@ namespace UserMVCApp
         {
             try
             {
-                var strBuilderParams = new StringBuilder()
-                    .Append(ApiUsersGetAllUsers)
-                    .Append(ServerSideParamDraw)
-                    .Append(serverSidePrms.draw)
-                    .Append(ServerSideParamStart)
-                    .Append(serverSidePrms.start)
-                    .Append(ServerSideParamLength)
-                    .Append(serverSidePrms.length)
-                    .Append(ServerSideParamColumnsDatas)
-                    .Append(serverSidePrms.columnsDatas)
-                    .Append(ServerSideParamColumnsOrderable)
-                    .Append(serverSidePrms.columnsOrderable)
-                    .Append(ServerSideParamColumnsSearchable)
-                    .Append(serverSidePrms.columnsSearchable)
-                    .Append(ServerSideParamColumnsSearchRegex)
-                    .Append(serverSidePrms.columnsSearchRegex)
-                    .Append(ServerSideParamSearchValue)
-                    .Append(serverSidePrms.searchValue)
-                    .Append(ServerSideParamOrderColumns)
-                    .Append(serverSidePrms.orderColumns)
-                    .Append(ServerSideParamOrderDirs)
-                    .Append(serverSidePrms.orderDirs)
-                    .Append(ServerSideParamСolumnsSearchValue)
-                    .Append(serverSidePrms.columnsSearchValue)
-                    .Append(ServerSideParamSearchRegex)
-                    .Append(serverSidePrms.searchRegex);
-
-                HttpResponseMessage response = _client.GetAsync(strBuilderParams.ToString()).Result;
+                HttpResponseMessage response = _client.GetAsync(PackServerSideInParams(ApiUsersGetAllUsers, serverSidePrms)).Result;
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -162,16 +135,24 @@ namespace UserMVCApp
             }
         }
 
-        public async Task<List<User>> GetAllUsersWithoutAdmins()
+        public async Task<ServerSidePage> GetAllUsersWithoutAdmins(serverSideParams serverSidePrms)
         {
-            HttpResponseMessage response = await _client.GetAsync(ApiUsersWithoutAdmins);
-
-            if (response.IsSuccessStatusCode)
+            try
             {
-                var stringResult = await response.Content.ReadAsStringAsync();
-                return JsonConvert.DeserializeObject<List<User>>(stringResult);
+                HttpResponseMessage response = _client.GetAsync(PackServerSideInParams(ApiUsersWithoutAdmins, serverSidePrms)).Result;
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var stringResult = await response.Content.ReadAsStringAsync();
+                    return JsonConvert.DeserializeObject<ServerSidePage>(stringResult);
+                }
+
+                return new ServerSidePage() { error = $"Error status: {response.StatusCode.ToString()}" };
             }
-            return new List<User>();
+            catch (Exception e)
+            {
+                return new ServerSidePage() { error = e.Message };
+            }
         }
 
         public async Task<User> CheckUserAndPasswd(string user, string password)
@@ -222,7 +203,7 @@ namespace UserMVCApp
             return response.StatusCode;
         }
 
-        private string PackUserInParams(string beginParams, User user)
+        private static string PackUserInParams(string beginParams, User user)
         {
             var builderQuery = new StringBuilder()
                 .Append(beginParams)
@@ -243,6 +224,38 @@ namespace UserMVCApp
                 .Append(user.IsAdmin);
 
             return builderQuery.ToString();
+        }
+
+        private static string PackServerSideInParams(string beginParams, serverSideParams serverSidePrms)
+        {
+            var strBuilderParams = new StringBuilder()
+                .Append(beginParams)
+                .Append(ServerSideParamDraw)
+                .Append(serverSidePrms.draw)
+                .Append(ServerSideParamStart)
+                .Append(serverSidePrms.start)
+                .Append(ServerSideParamLength)
+                .Append(serverSidePrms.length)
+                .Append(ServerSideParamColumnsDatas)
+                .Append(serverSidePrms.columnsDatas)
+                .Append(ServerSideParamColumnsOrderable)
+                .Append(serverSidePrms.columnsOrderable)
+                .Append(ServerSideParamColumnsSearchable)
+                .Append(serverSidePrms.columnsSearchable)
+                .Append(ServerSideParamColumnsSearchRegex)
+                .Append(serverSidePrms.columnsSearchRegex)
+                .Append(ServerSideParamSearchValue)
+                .Append(serverSidePrms.searchValue)
+                .Append(ServerSideParamOrderColumns)
+                .Append(serverSidePrms.orderColumns)
+                .Append(ServerSideParamOrderDirs)
+                .Append(serverSidePrms.orderDirs)
+                .Append(ServerSideParamСolumnsSearchValue)
+                .Append(serverSidePrms.columnsSearchValue)
+                .Append(ServerSideParamSearchRegex)
+                .Append(serverSidePrms.searchRegex);
+
+            return strBuilderParams.ToString();
         }
 
         public void Dispose()

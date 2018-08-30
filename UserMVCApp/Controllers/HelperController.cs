@@ -19,10 +19,11 @@ namespace UserMVCApp.Controllers
 
         // GET: /<controller>/GetNoAdmins
         [HttpGet]
-        public IActionResult GetNoAdmins([FromServices] IProxyServiceCallingWebApi proxyServiceCallingWeb)
+        public IActionResult GetNoAdmins([FromServices] IProxyServiceCallingWebApi proxyServiceCallingWeb, [FromQuery] serverSideParams serverSide)
         {
-            var users = Task.Run(proxyServiceCallingWeb.GetAllUsersWithoutAdmins).Result;
-            var jsonObj = Json(new { data = users });
+            var task = Task.Run(() => proxyServiceCallingWeb.GetAllUsersWithoutAdmins(serverSide));
+            var users = task.Result;
+            var jsonObj = Json(new { users });
             return jsonObj;
         }
 

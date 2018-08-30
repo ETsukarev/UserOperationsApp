@@ -11,10 +11,6 @@ namespace UserWebApi.Controllers
     [ApiController]
     public class UsersController : Controller
     {
-        private const string AscSort = "asc";
-
-        private const string DescSort = "desc";
-
         readonly UserContext _dbContext;
 
         public UsersController(UserContext context)
@@ -37,65 +33,10 @@ namespace UserWebApi.Controllers
                                       || s.LastName.Contains(serverSidePrms.searchValue)
                                       || s.Telephone.Contains(serverSidePrms.searchValue));
             }
-
-            var listSorting = serverSidePrms.RulesSorting();
-            foreach (var item in listSorting)
-            {
-                switch (item.numberCol)
-                {
-                    case 0:
-                        if (item.typeSorting.Equals(AscSort))
-                            users = users.OrderBy(usr => usr.Id);
-                        else if (item.typeSorting.Equals(DescSort))
-                            users = users.OrderByDescending(usr => usr.Id);
-                        break;
-                    case 1:
-                        if (item.typeSorting.Equals(AscSort))
-                            users = users.OrderBy(usr => usr.Login);
-                        else if (item.typeSorting.Equals(DescSort))
-                            users = users.OrderByDescending(usr => usr.Login);
-                        break;
-                    case 2:
-                        if (item.typeSorting.Equals(AscSort))
-                            users = users.OrderBy(usr => usr.Password);
-                        else if (item.typeSorting.Equals(DescSort))
-                            users = users.OrderByDescending(usr => usr.Password);
-                        break;
-                    case 3:
-                        if (item.typeSorting.Equals(AscSort))
-                            users = users.OrderBy(usr => usr.LastName);
-                        else if (item.typeSorting.Equals(DescSort))
-                            users = users.OrderByDescending(usr => usr.LastName);
-                        break;
-                    case 4:
-                        if (item.typeSorting.Equals(AscSort))
-                            users = users.OrderBy(usr => usr.FirstName);
-                        else if (item.typeSorting.Equals(DescSort))
-                            users = users.OrderByDescending(usr => usr.FirstName);
-                        break;
-                    case 5:
-                        if (item.typeSorting.Equals(AscSort))
-                            users = users.OrderBy(usr => usr.MiddleName);
-                        else if (item.typeSorting.Equals(DescSort))
-                            users = users.OrderByDescending(usr => usr.MiddleName);
-                        break;
-                    case 6:
-                        if (item.typeSorting.Equals(AscSort))
-                            users = users.OrderBy(usr => usr.Telephone);
-                        else if (item.typeSorting.Equals(DescSort))
-                            users = users.OrderByDescending(usr => usr.Telephone);
-                        break;
-                    case 7:
-                        if (item.typeSorting.Equals(AscSort))
-                            users = users.OrderBy(usr => usr.IsAdmin);
-                        else if (item.typeSorting.Equals(DescSort))
-                            users = users.OrderByDescending(usr => usr.IsAdmin);
-                        break;
-                    default:
-                        break;
-                }
-            }
             var recordsFiltered = users.Count();
+
+            users = serverSidePrms.SortingByRules(users);
+
             var items = users.AsNoTracking().Skip(serverSidePrms.start).Take(serverSidePrms.length).ToArray();
             var result = new ServerSidePage()
             {
@@ -111,9 +52,33 @@ namespace UserWebApi.Controllers
 
         // GET: api/<controller>/WithOutAdmins
         [HttpGet("WithOutAdmins")]
-        public IEnumerable<User> GetWithOutAdmins()
+        public ServerSidePage GetWithOutAdmins([FromQuery]serverSideParams serverSidePrm)
         {
-            return _dbContext.Users.Where(user => ! user.IsAdmin).ToList();
+            var users = _dbContext.Users.Where(user => ! user.IsAdmin);
+            var recsTotal = users.Count();
+
+            if (!string.IsNullOrEmpty(serverSidePrm.searchValue))
+            {
+                users = users.Where(s => s.FirstName.Contains(serverSidePrm.searchValue)
+                                         || s.MiddleName.Contains(serverSidePrm.searchValue)
+                                         || s.LastName.Contains(serverSidePrm.searchValue)
+                                         || s.Telephone.Contains(serverSidePrm.searchValue));
+            }
+            var recordsFiltered = users.Count();
+
+            users = serverSidePrm.SortingByRules(users);
+            var items = users.AsNoTracking().Skip(serverSidePrm.start).Take(serverSidePrm.length).ToArray();
+
+            var result = new ServerSidePage()
+            {
+                draw = serverSidePrm.draw,
+                recordsTotal = recsTotal,
+                recordsFiltered = recordsFiltered,
+                error = string.Empty,
+                data = items
+            };
+
+            return result;
         }
 
         // GET api/<controller>/CheckUser?login=admin&password=password

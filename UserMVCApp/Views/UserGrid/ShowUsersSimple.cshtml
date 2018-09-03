@@ -19,7 +19,7 @@
 <div class="container">
     <br />
     <div style="width:90%; margin:0 auto;">
-        <table id="myTableUsers" class="display" style="width:100%">
+        <table id="tableUsers" class="display" style="width:100%">
             <thead>
                 <tr>
                     <th>Идентификатор</th>
@@ -44,7 +44,7 @@
 <script>
 
     $(function() {
-        $('#myTableUsers').DataTable({
+        $('#tableUsers').DataTable({
             "serverSide": true,
             "order": [[3, 'asc']],
             "ajax": {

@@ -29,6 +29,8 @@ namespace UserMVCApp
         HttpStatusCode SaveUser(User user);
 
         HttpStatusCode NewUser(User user);
+
+        CheckLoginResult ExistThatLogin(string login);
     }
 
     public class ProxyServiceCallingWebApi : IProxyServiceCallingWebApi, IDisposable
@@ -40,6 +42,10 @@ namespace UserMVCApp
         private const string ApiUsersRoot = "api/Users";
 
         private const string ApiUsersGetAllUsers = "api/Users/AllUsers?";
+
+        private const string ApiUsersWithoutAdmins = "api/Users/WithOutAdmins?";
+
+        private const string ApiUsersExistThatLogin = "/ExistThatLogin?loginCheck=";
 
         private const string ServerSideParamDraw = "draw=";
 
@@ -64,8 +70,6 @@ namespace UserMVCApp
         private const string ServerSideParamСolumnsSearchValue = "&columnsSearchValue=";
 
         private const string ServerSideParamColumnsSearchRegex = "&columnsSearchRegex=";
-
-        private const string ApiUsersWithoutAdmins = "api/Users/WithOutAdmins?";
 
         private const string ApiCheckUserLogin = "/CheckUser?login=";
 
@@ -114,6 +118,27 @@ namespace UserMVCApp
         }
 
         #endregion
+
+        #region Implemented_IProxyServiceCallingWebApi
+
+        public CheckLoginResult ExistThatLogin(string login)
+        {
+            try
+            {
+                HttpResponseMessage response = _client.GetAsync($"{ApiUsersRoot}{ApiUsersExistThatLogin}{login}").Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    var stringResult = response.Content.ReadAsStringAsync().Result;
+                    var res = JsonConvert.DeserializeObject<bool>(stringResult);
+                    return new CheckLoginResult() {ResultCheckLogin = res, Error = null};
+                }
+                return new CheckLoginResult() { ResultCheckLogin = false, Error = new Exception($"Error status: {response.StatusCode.ToString()}") };
+            }
+            catch (Exception ex)
+            {
+                return new CheckLoginResult() { ResultCheckLogin = false, Error = new Exception($"Error status: {ex}") };
+            }
+        }
 
         public async Task<ServerSidePage> GetAllUsers(serverSideParams serverSidePrms)
         {
@@ -203,6 +228,12 @@ namespace UserMVCApp
             return response.StatusCode;
         }
 
+        #endregion
+
+        public void Dispose()
+        {
+        }
+
         private static string PackUserInParams(string beginParams, User user)
         {
             var builderQuery = new StringBuilder()
@@ -256,10 +287,6 @@ namespace UserMVCApp
                 .Append(serverSidePrms.searchRegex);
 
             return strBuilderParams.ToString();
-        }
-
-        public void Dispose()
-        {
         }
     }
 }

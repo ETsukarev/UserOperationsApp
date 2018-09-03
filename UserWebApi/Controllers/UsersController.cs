@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using UserWebApi.Models;
@@ -16,6 +16,14 @@ namespace UserWebApi.Controllers
         public UsersController(UserContext context)
         {
             _dbContext = context;
+        }
+
+        // GET: api/<controller>/ExistThatLogin?
+        [HttpGet("ExistThatLogin")]
+        public bool ExistThatLogin([FromQuery]string loginCheck)
+        {
+            var result = _dbContext.Users.FirstOrDefault(usr => usr.Login.Equals(loginCheck));
+            return result != null;
         }
 
         // GET: api/<controller>/AllUsers?

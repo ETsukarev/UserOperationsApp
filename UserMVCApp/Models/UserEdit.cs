@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc;
 
 namespace UserMVCApp.Models
 {
@@ -8,6 +9,7 @@ namespace UserMVCApp.Models
 
         [Required]
         [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Используйте только латинские буквы")]
+        [Remote(action: "ExistThatLogin", controller: "Helper")]
         public string Login { get; set; }
 
         [Required]

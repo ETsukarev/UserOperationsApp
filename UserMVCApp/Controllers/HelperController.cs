@@ -19,7 +19,7 @@ namespace UserMVCApp.Controllers
 
         // GET: /<controller>/GetNoAdmins
         [HttpGet]
-        public IActionResult GetNoAdmins([FromServices] IProxyServiceCallingWebApi proxyServiceCallingWeb, [FromQuery] serverSideParams serverSide)
+        public JsonResult GetNoAdmins([FromServices] IProxyServiceCallingWebApi proxyServiceCallingWeb, [FromQuery] serverSideParams serverSide)
         {
             var task = Task.Run(() => proxyServiceCallingWeb.GetAllUsersWithoutAdmins(serverSide));
             var users = task.Result;
@@ -34,5 +34,28 @@ namespace UserMVCApp.Controllers
             return status;
         }
 
+        // GET: /<controller>/ExistThatLogin
+        [HttpGet]
+        public JsonResult ExistThatLogin([FromServices] IProxyServiceCallingWebApi proxyServiceCallingWeb, [FromQuery] string login)
+        {
+            var result = proxyServiceCallingWeb.ExistThatLogin(login);
+
+
+            if (result.Error == null && !result.ResultCheckLogin)
+            {
+                return Json(true);
+            }
+
+            if (result.ResultCheckLogin)
+            {
+                return Json("Пользователь с таким логином уже присутствует. Выберите другое имя !");
+            }
+            else if (result.Error != null)
+            {
+                return Json(result.Error.Message);
+            }
+
+            return Json(true);
+        }
     }
 }

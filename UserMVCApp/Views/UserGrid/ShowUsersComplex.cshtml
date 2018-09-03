@@ -18,7 +18,7 @@
 <div class="container">
     <br />
     <div style="width:90%; margin:0 auto;">
-        <table id="myTableUsers" class="display" style="width:100%">
+        <table id="tableUsers" class="display" style="width:100%">
             <thead>
                 <tr>
                     <th>Идентификатор</th>
@@ -46,7 +46,7 @@
 <script>
 
     $(function() {
-        var table = $('#myTableUsers').DataTable({
+        var table = $('#tableUsers').DataTable({
             "serverSide": true,
             "order": [[3, 'asc']],
             "ajax": {
@@ -101,7 +101,7 @@
         });
 
         // Handle click on "Edit" button
-        $('#myTableUsers tbody').on('click', '.btn-edit', function () {
+        $('#tableUsers tbody').on('click', '.btn-edit', function () {
 
             var data = table.row($(this).parents('tr')).data();
 
@@ -111,7 +111,7 @@
 
 
         // Handle click on "Delete" button
-        $('#myTableUsers tbody').on('click', '.btn-delete', function () {
+        $('#tableUsers tbody').on('click', '.btn-delete', function () {
             var data = table.row($(this).parents('tr')).data();
 
             table.row($(this).parents('tr')).remove().draw(false);

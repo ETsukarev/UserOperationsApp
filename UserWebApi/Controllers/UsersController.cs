@@ -1,9 +1,9 @@
 ﻿using System.Linq;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using MiddleWareWebApi.Models;
+using MiddleWareWebApi.Proxy;
 using UserWebApi.Models;
-using UserWebApi.Proxy;
 
 namespace UserWebApi.Controllers
 {

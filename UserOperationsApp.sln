@@ -7,6 +7,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserWebApi", "UserWebApi\Us
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserMVCApp", "UserMVCApp\UserMVCApp.csproj", "{BF7D1C96-C311-4C75-8467-60BA52F633E2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserRPApp", "UserRPApp\UserRPApp.csproj", "{17652905-D7A8-4090-A940-1F6ED87C5D17}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiddleWareWebApi", "MiddleWareWebApi\MiddleWareWebApi.csproj", "{67BCCE4F-2E5F-4069-A491-47BF7B78C184}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{BF7D1C96-C311-4C75-8467-60BA52F633E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BF7D1C96-C311-4C75-8467-60BA52F633E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BF7D1C96-C311-4C75-8467-60BA52F633E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17652905-D7A8-4090-A940-1F6ED87C5D17}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17652905-D7A8-4090-A940-1F6ED87C5D17}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17652905-D7A8-4090-A940-1F6ED87C5D17}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17652905-D7A8-4090-A940-1F6ED87C5D17}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67BCCE4F-2E5F-4069-A491-47BF7B78C184}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67BCCE4F-2E5F-4069-A491-47BF7B78C184}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67BCCE4F-2E5F-4069-A491-47BF7B78C184}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67BCCE4F-2E5F-4069-A491-47BF7B78C184}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

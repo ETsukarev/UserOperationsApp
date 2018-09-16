@@ -18,10 +18,6 @@
     {
       "library": "datatables@1.10.19",
       "destination": "wwwroot/lib/datatables_net"
-    },
-    {
-      "library": "jquery-validation-unobtrusive@3.2.10",
-      "destination": "wwwroot/lib/jquery-validation-unobtrusive/"
     }
   ]
 }

@@ -10,7 +10,6 @@ namespace UserRPApp.Models
         [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Используйте только латинские буквы")]
         public string Login { get; set; }
 
-        [Required]
         [DataType(DataType.Password)]
         public string Password { get; set; }
 

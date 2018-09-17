@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MiddleWareWebApi.Models;
@@ -20,9 +21,10 @@ namespace UserWebApi.Controllers
 
         // GET: api/<controller>/ExistThatLogin?
         [HttpGet("ExistThatLogin")]
-        public bool ExistThatLogin([FromQuery]string loginCheck)
+        public bool ExistThatLogin([FromQuery]string loginCheck, [FromQuery]int userId)
         {
-            var result = _dbContext.Users.FirstOrDefault(usr => usr.Login.Equals(loginCheck));
+            User result;
+            result = userId == 0 ? _dbContext.Users.FirstOrDefault(usr => usr.Login.Equals(loginCheck)) : _dbContext.Users.FirstOrDefault(usr => (usr.Login.Equals(loginCheck) && !usr.Id.Equals(userId)));
             return result != null;
         }
 

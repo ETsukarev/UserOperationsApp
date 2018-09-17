@@ -29,13 +29,11 @@ namespace MiddleWareWebApi
 
         HttpStatusCode NewUser(User user);
 
-        CheckLoginResult ExistThatLogin(string login);
+        string ExistLogin(string login, int userId);
     }
 
     public class ProxyServiceCallingWebApi : IProxyServiceCallingWebApi, IDisposable
     {
-        private readonly IOptions<UriWebAPI> _appConfig;
-
         private readonly HttpClient _client;
 
         private const string ApiUsersRoot = "api/Users";
@@ -98,10 +96,10 @@ namespace MiddleWareWebApi
 
         public ProxyServiceCallingWebApi(IOptions<UriWebAPI> appConfig)
         {
-            _appConfig = appConfig;
-            _client = new HttpClient {BaseAddress = new Uri(_appConfig.Value.Uri)};
+            var appConfig1 = appConfig;
+            _client = new HttpClient {BaseAddress = new Uri(appConfig1.Value.Uri)};
             _client.DefaultRequestHeaders.Accept.Add(
-                new MediaTypeWithQualityHeaderValue(_appConfig.Value.MediaType));
+                new MediaTypeWithQualityHeaderValue(appConfig1.Value.MediaType));
         }
 
         #region Implemented_IHostedService
@@ -120,23 +118,27 @@ namespace MiddleWareWebApi
 
         #region Implemented_IProxyServiceCallingWebApi
 
-        public CheckLoginResult ExistThatLogin(string login)
+        public string ExistLogin(string login, int userId)
         {
-            try
+            var result = ExistThatLogin(login, userId);
+
+
+            if (result.Error == null && !result.ResultCheckLogin)
             {
-                HttpResponseMessage response = _client.GetAsync($"{ApiUsersRoot}{ApiUsersExistThatLogin}{login}").Result;
-                if (response.IsSuccessStatusCode)
-                {
-                    var stringResult = response.Content.ReadAsStringAsync().Result;
-                    var res = JsonConvert.DeserializeObject<bool>(stringResult);
-                    return new CheckLoginResult() {ResultCheckLogin = res, Error = null};
-                }
-                return new CheckLoginResult() { ResultCheckLogin = false, Error = new Exception($"Error status: {response.StatusCode.ToString()}") };
+                return string.Empty;
             }
-            catch (Exception ex)
+
+            if (result.ResultCheckLogin)
             {
-                return new CheckLoginResult() { ResultCheckLogin = false, Error = new Exception($"Error status: {ex}") };
+                return "Пользователь с таким логином уже cуществует. Выберите другое имя !";
             }
+
+            if (result.Error != null)
+            {
+                return result.Error.Message;
+            }
+
+            return string.Empty;
         }
 
         public async Task<ServerSidePage> GetAllUsers(serverSideParams serverSidePrms)
@@ -286,6 +288,25 @@ namespace MiddleWareWebApi
                 .Append(serverSidePrms.searchRegex);
 
             return strBuilderParams.ToString();
+        }
+
+        private CheckLoginResult ExistThatLogin(string login, int userId)
+        {
+            try
+            {
+                HttpResponseMessage response = _client.GetAsync($"{ApiUsersRoot}{ApiUsersExistThatLogin}{login}&userId={userId}").Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    var stringResult = response.Content.ReadAsStringAsync().Result;
+                    var res = JsonConvert.DeserializeObject<bool>(stringResult);
+                    return new CheckLoginResult() { ResultCheckLogin = res, Error = null };
+                }
+                return new CheckLoginResult() { ResultCheckLogin = false, Error = new Exception($"Error status: {response.StatusCode.ToString()}") };
+            }
+            catch (Exception ex)
+            {
+                return new CheckLoginResult() { ResultCheckLogin = false, Error = new Exception($"Error status: {ex}") };
+            }
         }
     }
 }

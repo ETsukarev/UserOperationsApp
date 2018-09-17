@@ -83,6 +83,7 @@
                     {
                         "data": null,
                         "targets": [8],
+                        "width": "30%",
                         "defaultContent":
                             '<button class="btn-edit" type="button">Редактировать</button>'
                                 + '<button class="btn-delete" type="button">Delete</button>'
@@ -106,10 +107,9 @@
 
                 var data = table.row($(this).parents('tr')).data();
 
-                window.location.href = '/UserGrid/UserEdit?userId=' + data.Id;
+                window.location.href = '/EditUser?handler=OneUser&userId=' + data.Id;
 
             });
-
 
             // Handle click on "Delete" button
             $('#tableUsers tbody').on('click', '.btn-delete', function () {

@@ -40,6 +40,9 @@ namespace UserRPApp.Pages
                         Telephone = Person.Telephone
                     };
 
+                    if (userToSave.Password == null)
+                        userToSave.Password = string.Empty;
+
                     var result = proxyServiceCallingWeb.NewUser(userToSave);
 
                     if (result == HttpStatusCode.OK)

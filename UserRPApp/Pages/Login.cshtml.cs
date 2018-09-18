@@ -17,7 +17,6 @@ namespace UserRPApp.Pages
         [BindProperty]
         public string Login  { get; set; }
 
-        [Required(ErrorMessage = "Укажите пароль !")]
         [DataType(DataType.Password)]
         [BindProperty]
         public string Password { get; set; }

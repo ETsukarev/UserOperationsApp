@@ -12,9 +12,6 @@ namespace UserRPApp.Pages
         [BindProperty]
         public UserEdit Person { get; set; }
 
-        [BindProperty]
-        public string password { get; set; }
-
         public IActionResult OnGetOneUser([FromServices] IProxyServiceCallingWebApi proxyServiceCallingWeb, [FromQuery]int userId)
         {
             User user = proxyServiceCallingWeb.GetUser(userId).Result;
@@ -30,8 +27,7 @@ namespace UserRPApp.Pages
                 Telephone = user.Telephone
             };
 
-            password = user.Password;
-
+            TempData["pass"] = user.Password;
             return Page();
         }
 
@@ -55,7 +51,7 @@ namespace UserRPApp.Pages
                         LastName = Person.LastName,
                         IsAdmin = Person.IsAdmin,
                         Telephone = Person.Telephone,
-                        Password = Person.Password ?? password
+                        Password = Person.Password ?? TempData["pass"] as string
                     };
 
                     var result = proxyServiceCallingWeb.SaveUser(userToSave);

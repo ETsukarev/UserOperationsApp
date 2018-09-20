@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Net;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MiddleWareWebApi;
@@ -27,6 +28,12 @@ namespace UserRPApp.Pages
             var users = task.Result;
             var jsonObj = new JsonResult(new { users });
             return jsonObj;
+        }
+
+        public IActionResult OnGetDelUser([FromQuery] int userId)
+        {
+            var status = _proxyServiceCallingWebApi.DeleteUser(userId);
+            return StatusCode((int)status);
         }
     }
 }

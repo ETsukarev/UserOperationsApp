@@ -113,15 +113,23 @@
 
             // Handle click on "Delete" button
             $('#tableUsers tbody').on('click', '.btn-delete', function () {
-                var data = table.row($(this).parents('tr')).data();
 
-                table.row($(this).parents('tr')).remove().draw(false);
+                var rowDel = table.row($(this).parents('tr')).data();
 
                 $.ajax({
-                    type: "POST",
-                    url: '/Helper/Delete?userId=' + data.Id,
+                    "type": "GET",
+                    "url":  "/AllUsers?handler=DelUser",
+                    "datatype": "json",
+                    "data": { userId: rowDel.Id },
 
-                    datatype: "json"
+                    "statusCode": {
+                        200: function() {
+                            table.row($(this).parents('tr')).remove().draw(false);
+                        },
+                        404: function() {
+                            alert( "Пользователь не найден !" );
+                        }
+                    }
 
                 });
 

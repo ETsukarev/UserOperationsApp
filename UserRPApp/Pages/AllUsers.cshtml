@@ -117,17 +117,17 @@
                 var rowDel = table.row($(this).parents('tr')).data();
 
                 $.ajax({
-                    "type": "GET",
-                    "url":  "/AllUsers?handler=DelUser",
-                    "datatype": "json",
+                    "url": '/AllUsers?handler=DelUser',
+                    "method": "GET",
                     "data": { userId: rowDel.Id },
-
+                    "datatype": "json",
+                    "contentType": "application/json",
                     "statusCode": {
                         200: function() {
                             table.row($(this).parents('tr')).remove().draw(false);
                         },
                         404: function() {
-                            alert( "Пользователь не найден !" );
+                            alert( "User not found !" );
                         }
                     }
 

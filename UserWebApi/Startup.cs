@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -20,8 +21,15 @@ namespace UserWebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<UserContext>(options => options.UseSqlServer(Configuration.GetConnectionString("UserDBConnection")));
+            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production")
+                services.AddDbContext<UserContext>(options => options.UseSqlServer(Configuration.GetConnectionString("UserDBConnection")));
+            else
+            {
+                services.AddDbContext<UserContext>(options => options.UseSqlServer(Configuration.GetConnectionString("UserDBConnectionLocal")));
+            }
 
+            // Automatically perform database migration
+            services.BuildServiceProvider().GetService<UserContext>().Database.Migrate();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 

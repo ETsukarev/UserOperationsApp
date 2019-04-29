@@ -6,6 +6,8 @@
     <OutputType>Exe</OutputType>
     <TieredCompilation>true</TieredCompilation>
     <StartupObject />
+    <ApplicationInsightsResourceId>/subscriptions/9a4675f7-a49a-4c7d-804b-b3e31f9d8549/resourcegroups/GroupResources1/providers/microsoft.insights/components/App_Insight</ApplicationInsightsResourceId>
+    <ApplicationInsightsAnnotationResourceId>/subscriptions/9a4675f7-a49a-4c7d-804b-b3e31f9d8549/resourcegroups/GroupResources1/providers/microsoft.insights/components/App_Insight</ApplicationInsightsAnnotationResourceId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,11 +15,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.7.0-beta3" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\MiddleWareWebApi\MiddleWareWebApi.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services" />
   </ItemGroup>
 
 </Project>

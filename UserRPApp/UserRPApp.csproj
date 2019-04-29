@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
     <TieredCompilation>true</TieredCompilation>
     <ApplicationInsightsResourceId>/subscriptions/9a4675f7-a49a-4c7d-804b-b3e31f9d8549/resourcegroups/GroupResources1/providers/microsoft.insights/components/App_Insight</ApplicationInsightsResourceId>
     <ApplicationInsightsAnnotationResourceId>/subscriptions/9a4675f7-a49a-4c7d-804b-b3e31f9d8549/resourcegroups/GroupResources1/providers/microsoft.insights/components/App_Insight</ApplicationInsightsAnnotationResourceId>
@@ -10,7 +10,6 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.7.0-beta3" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
   </ItemGroup>
 
   <ItemGroup>

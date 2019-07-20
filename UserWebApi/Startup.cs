@@ -21,12 +21,12 @@ namespace UserWebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production")
+            //if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production")
                 services.AddDbContext<UserContext>(options => options.UseSqlServer(Configuration.GetConnectionString("UserDBConnection")));
-            else
-            {
-                services.AddDbContext<UserContext>(options => options.UseSqlServer(Configuration.GetConnectionString("UserDBConnectionLocal")));
-            }
+            //else
+            //{
+            //    services.AddDbContext<UserContext>(options => options.UseSqlServer(Configuration.GetConnectionString("UserDBConnectionLocal")));
+            //}
 
             // Automatically perform database migration
             services.BuildServiceProvider().GetService<UserContext>().Database.Migrate();

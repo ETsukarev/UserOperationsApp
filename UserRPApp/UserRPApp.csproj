@@ -5,6 +5,7 @@
     <TieredCompilation>true</TieredCompilation>
     <ApplicationInsightsResourceId>/subscriptions/9a4675f7-a49a-4c7d-804b-b3e31f9d8549/resourcegroups/GroupResources1/providers/microsoft.insights/components/App_Insight</ApplicationInsightsResourceId>
     <ApplicationInsightsAnnotationResourceId>/subscriptions/9a4675f7-a49a-4c7d-804b-b3e31f9d8549/resourcegroups/GroupResources1/providers/microsoft.insights/components/App_Insight</ApplicationInsightsAnnotationResourceId>
+    <UserSecretsId>c7cd3211-eaf3-485e-b85e-e7a49c6e75c6</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
